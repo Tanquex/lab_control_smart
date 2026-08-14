@@ -12,11 +12,11 @@ class LabControlApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'LabControl Smart',
+      title: 'LabControl Smart TV',
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.system,
+      theme: AppTheme.tvDarkTheme,
+      darkTheme: AppTheme.tvDarkTheme,
+      themeMode: ThemeMode.dark,
       home: const EquipmentScreen(),
     );
   }
