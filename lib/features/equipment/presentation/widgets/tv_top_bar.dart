@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../../../../config/theme/app_theme.dart';
 
 class TvTopBar extends StatefulWidget {
@@ -125,38 +126,6 @@ class _TvTopBarState extends State<TvTopBar> {
               ),
             ),
           ),
-
-          // Indicador de Estado en Vivo (Live Badge)
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
-            decoration: BoxDecoration(
-              color: AppTheme.statusAvailable.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: AppTheme.statusAvailable.withValues(alpha: 0.3)),
-            ),
-            child: Row(
-              children: [
-                Container(
-                  width: 8,
-                  height: 8,
-                  decoration: const BoxDecoration(
-                    color: AppTheme.statusAvailable,
-                    shape: BoxShape.circle,
-                  ),
-                ),
-                const SizedBox(width: 8),
-                const Text(
-                  'EN VIVO',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                    color: AppTheme.statusAvailable,
-                    letterSpacing: 1,
-                  ),
-                ),
-              ],
-            ),
-          ),
         ],
       ),
     );
@@ -194,11 +163,21 @@ class _TvTabButtonState extends State<_TvTabButton> {
           _isFocused = focused;
         });
       },
-      child: InkWell(
+      onKeyEvent: (node, event) {
+        if (event is KeyDownEvent) {
+          final key = event.logicalKey;
+          if (key == LogicalKeyboardKey.enter ||
+              key == LogicalKeyboardKey.numpadEnter ||
+              key == LogicalKeyboardKey.select ||
+              key == LogicalKeyboardKey.space) {
+            widget.onPressed();
+            return KeyEventResult.handled;
+          }
+        }
+        return KeyEventResult.ignored;
+      },
+      child: GestureDetector(
         onTap: widget.onPressed,
-        borderRadius: BorderRadius.circular(12),
-        focusColor: Colors.transparent,
-        hoverColor: Colors.transparent,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),

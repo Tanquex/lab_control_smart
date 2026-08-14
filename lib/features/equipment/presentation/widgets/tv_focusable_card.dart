@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../../../../config/theme/app_theme.dart';
 
 class TvFocusableCard extends StatefulWidget {
@@ -31,15 +32,25 @@ class _TvFocusableCardState extends State<TvFocusableCard> {
           _isFocused = focused;
         });
       },
-      child: InkWell(
+      onKeyEvent: (node, event) {
+        if (event is KeyDownEvent) {
+          final key = event.logicalKey;
+          if (key == LogicalKeyboardKey.enter ||
+              key == LogicalKeyboardKey.numpadEnter ||
+              key == LogicalKeyboardKey.select ||
+              key == LogicalKeyboardKey.space) {
+            if (widget.onPressed != null) {
+              widget.onPressed!();
+              return KeyEventResult.handled;
+            }
+          }
+        }
+        return KeyEventResult.ignored;
+      },
+      child: GestureDetector(
         onTap: widget.onPressed,
-        borderRadius: widget.borderRadius,
-        focusColor: Colors.transparent,
-        hoverColor: Colors.transparent,
-        splashColor: Colors.transparent,
-        highlightColor: Colors.transparent,
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 180),
+          duration: const Duration(milliseconds: 150),
           curve: Curves.easeOutCubic,
           transform: _isFocused
               ? Matrix4.diagonal3Values(1.03, 1.03, 1.0)
