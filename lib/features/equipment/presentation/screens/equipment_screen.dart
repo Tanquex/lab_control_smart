@@ -3,6 +3,7 @@ import '../../../../config/theme/app_theme.dart';
 import '../../data/models/equipment_model.dart';
 import '../../data/repositories/equipment_repository.dart';
 import '../widgets/equipment_card.dart';
+import '../widgets/tv_focusable_card.dart';
 import '../widgets/tv_top_bar.dart';
 
 class EquipmentScreen extends StatefulWidget {
@@ -230,6 +231,37 @@ class _EquipmentScreenState extends State<EquipmentScreen> {
             style: const TextStyle(
               fontSize: 16,
               color: AppTheme.textSecondary,
+            ),
+          ),
+          const SizedBox(height: 28),
+          TvFocusableCard(
+            autofocus: true,
+            onPressed: () {
+              setState(() {
+                _selectedTabIndex = 0;
+              });
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              decoration: BoxDecoration(
+                color: AppTheme.primary,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: const Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.arrow_back_rounded, color: Colors.white, size: 20),
+                  SizedBox(width: 10),
+                  Text(
+                    'Volver a Stock de Equipos',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],

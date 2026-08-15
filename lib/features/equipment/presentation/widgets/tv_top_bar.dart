@@ -17,11 +17,27 @@ class TvTopBar extends StatefulWidget {
 }
 
 class _TvTopBarState extends State<TvTopBar> {
+  late final List<FocusNode> _focusNodes;
+
   final List<Map<String, dynamic>> _tabs = const [
     {'title': 'Stock de Equipos', 'icon': Icons.inventory_2_rounded},
     {'title': 'Pedidos y Turnos', 'icon': Icons.assignment_turned_in_rounded},
     {'title': 'Resumen del Lab', 'icon': Icons.dashboard_rounded},
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNodes = List.generate(_tabs.length, (index) => FocusNode());
+  }
+
+  @override
+  void dispose() {
+    for (final node in _focusNodes) {
+      node.dispose();
+    }
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -115,11 +131,14 @@ class _TvTopBarState extends State<TvTopBar> {
                   return Padding(
                     padding: const EdgeInsets.only(right: 12),
                     child: _TvTabButton(
+                      key: ValueKey('tv_tab_$index'),
+                      focusNode: _focusNodes[index],
                       title: tab['title'],
                       icon: tab['icon'],
                       isSelected: isSelected,
-                      onPressed: () => widget.onTabSelected(index),
-                      autofocus: index == 0,
+                      onPressed: () {
+                        widget.onTabSelected(index);
+                      },
                     ),
                   );
                 }),
@@ -133,18 +152,19 @@ class _TvTopBarState extends State<TvTopBar> {
 }
 
 class _TvTabButton extends StatefulWidget {
+  final FocusNode focusNode;
   final String title;
   final IconData icon;
   final bool isSelected;
   final VoidCallback onPressed;
-  final bool autofocus;
 
   const _TvTabButton({
+    super.key,
+    required this.focusNode,
     required this.title,
     required this.icon,
     required this.isSelected,
     required this.onPressed,
-    this.autofocus = false,
   });
 
   @override
@@ -155,14 +175,30 @@ class _TvTabButtonState extends State<_TvTabButton> {
   bool _isFocused = false;
 
   @override
+  void initState() {
+    super.initState();
+    widget.focusNode.addListener(_onFocusChange);
+    _isFocused = widget.focusNode.hasFocus;
+  }
+
+  @override
+  void dispose() {
+    widget.focusNode.removeListener(_onFocusChange);
+    super.dispose();
+  }
+
+  void _onFocusChange() {
+    if (mounted) {
+      setState(() {
+        _isFocused = widget.focusNode.hasFocus;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Focus(
-      autofocus: widget.autofocus,
-      onFocusChange: (focused) {
-        setState(() {
-          _isFocused = focused;
-        });
-      },
+      focusNode: widget.focusNode,
       onKeyEvent: (node, event) {
         if (event is KeyDownEvent) {
           final key = event.logicalKey;
@@ -177,7 +213,10 @@ class _TvTabButtonState extends State<_TvTabButton> {
         return KeyEventResult.ignored;
       },
       child: GestureDetector(
-        onTap: widget.onPressed,
+        onTap: () {
+          widget.focusNode.requestFocus();
+          widget.onPressed();
+        },
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
