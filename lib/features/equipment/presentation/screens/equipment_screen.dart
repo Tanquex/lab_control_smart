@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../../../config/theme/app_theme.dart';
 import '../../data/models/equipment_model.dart';
@@ -18,11 +19,22 @@ class _EquipmentScreenState extends State<EquipmentScreen> {
   List<EquipmentModel> _equipmentList = [];
   bool _isLoading = true;
   int _selectedTabIndex = 0;
+  Timer? _refreshTimer;
 
   @override
   void initState() {
     super.initState();
     _loadData();
+    // Auto-refresco en tiempo real cada 10 segundos para pantalla de TV
+    _refreshTimer = Timer.periodic(const Duration(seconds: 10), (_) {
+      _silentRefreshData();
+    });
+  }
+
+  @override
+  void dispose() {
+    _refreshTimer?.cancel();
+    super.dispose();
   }
 
   Future<void> _loadData() async {
@@ -30,10 +42,21 @@ class _EquipmentScreenState extends State<EquipmentScreen> {
       _isLoading = true;
     });
     final items = await _repository.getEquipmentList();
-    setState(() {
-      _equipmentList = items;
-      _isLoading = false;
-    });
+    if (mounted) {
+      setState(() {
+        _equipmentList = items;
+        _isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _silentRefreshData() async {
+    final items = await _repository.getEquipmentList();
+    if (mounted) {
+      setState(() {
+        _equipmentList = items;
+      });
+    }
   }
 
   @override
