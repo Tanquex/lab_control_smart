@@ -122,69 +122,72 @@ class _EquipmentScreenState extends State<EquipmentScreen> {
     required int rentedUnits,
   }) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 20),
+      padding: const EdgeInsets.only(top: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Cabecera Informativa Desahogada
-          Wrap(
-            alignment: WrapAlignment.spaceBetween,
-            crossAxisAlignment: WrapCrossAlignment.center,
-            spacing: 16,
-            runSpacing: 12,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Catálogo de Equipos y Stock',
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: AppTheme.textPrimary,
-                        ),
-                  ),
-                  const SizedBox(height: 2),
-                  const Text(
-                    'Monitoreo en tiempo real de disponibilidad en laboratorios',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: AppTheme.textSecondary,
-                    ),
-                  ),
-                ],
-              ),
-
-              // Chips Informativos de Métricas (Diseño Limpio)
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
+          // Cabecera Informativa Desahogada con padding horizontal
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 28),
+            child: Wrap(
+              alignment: WrapAlignment.spaceBetween,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              spacing: 16,
+              runSpacing: 12,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _MetricChip(
-                      label: 'TOTAL',
-                      value: '$totalUnits',
-                      color: AppTheme.primary,
-                      icon: Icons.inventory_rounded,
+                    Text(
+                      'Catálogo de Equipos y Stock',
+                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: AppTheme.textPrimary,
+                          ),
                     ),
-                    const SizedBox(width: 10),
-                    _MetricChip(
-                      label: 'DISPONIBLES',
-                      value: '$availableUnits',
-                      color: AppTheme.statusAvailable,
-                      icon: Icons.check_circle_rounded,
-                    ),
-                    const SizedBox(width: 10),
-                    _MetricChip(
-                      label: 'EN PRÉSTAMO',
-                      value: '$rentedUnits',
-                      color: AppTheme.statusWarning,
-                      icon: Icons.assignment_return_rounded,
+                    const SizedBox(height: 2),
+                    const Text(
+                      'Monitoreo en tiempo real de disponibilidad en laboratorios',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: AppTheme.textSecondary,
+                      ),
                     ),
                   ],
                 ),
-              ),
-            ],
+
+                // Chips Informativos de Métricas (Diseño Limpio)
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      _MetricChip(
+                        label: 'TOTAL',
+                        value: '$totalUnits',
+                        color: AppTheme.primary,
+                        icon: Icons.inventory_rounded,
+                      ),
+                      const SizedBox(width: 10),
+                      _MetricChip(
+                        label: 'DISPONIBLES',
+                        value: '$availableUnits',
+                        color: AppTheme.statusAvailable,
+                        icon: Icons.check_circle_rounded,
+                      ),
+                      const SizedBox(width: 10),
+                      _MetricChip(
+                        label: 'EN PRÉSTAMO',
+                        value: '$rentedUnits',
+                        color: AppTheme.statusWarning,
+                        icon: Icons.assignment_return_rounded,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
 
           const SizedBox(height: 20),
@@ -214,8 +217,8 @@ class _EquipmentScreenState extends State<EquipmentScreen> {
                       }
 
                       return GridView.builder(
-                        clipBehavior: Clip.none,
-                        padding: const EdgeInsets.only(bottom: 20),
+                        clipBehavior: Clip.hardEdge,
+                        padding: const EdgeInsets.only(left: 28, right: 28, bottom: 24, top: 10),
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: crossAxisCount,
                           childAspectRatio: childAspectRatio,
