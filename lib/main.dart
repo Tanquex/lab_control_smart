@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'config/theme/app_theme.dart';
-import 'features/equipment/presentation/screens/equipment_screen.dart';
+import 'features/equipment/presentation/screens/tv_pairing_screen.dart';
 
 void main() {
   runApp(const LabControlApp());
@@ -17,7 +17,7 @@ class LabControlApp extends StatelessWidget {
       theme: AppTheme.tvDarkTheme,
       darkTheme: AppTheme.tvDarkTheme,
       themeMode: ThemeMode.dark,
-      home: const EquipmentScreen(),
+      home: const TvPairingScreen(),
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../../config/theme/app_theme.dart';
+import '../../../../config/session/tv_auth_session.dart';
 
 class TvTopBar extends StatefulWidget {
   final int selectedIndex;
@@ -145,6 +146,34 @@ class _TvTopBarState extends State<TvTopBar> {
               ),
             ),
           ),
+          
+          const SizedBox(width: 20),
+          
+          // Sesión de TV vinculada (si existe)
+          if (TvAuthSession.isPaired)
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                color: AppTheme.primary.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: AppTheme.primary.withValues(alpha: 0.2)),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.verified_user_rounded, color: AppTheme.primary, size: 14),
+                  const SizedBox(width: 6),
+                  Text(
+                    TvAuthSession.pairedUser?['name'] ?? 'Admin',
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: AppTheme.primaryDark,
+                    ),
+                  ),
+                ],
+              ),
+            ),
         ],
       ),
     );
