@@ -13,10 +13,19 @@ class EquipmentModel extends Equipment {
   });
 
   factory EquipmentModel.fromJson(Map<String, dynamic> json) {
+    String parsedCategoryId = '';
+    if (json['category'] is Map<String, dynamic>) {
+      parsedCategoryId = json['category']['name'] ?? '';
+    } else if (json['category'] is String) {
+      parsedCategoryId = json['category'];
+    } else {
+      parsedCategoryId = json['category_id'] ?? json['categoryId'] ?? '';
+    }
+
     return EquipmentModel(
       id: json['id'] ?? '',
       name: json['name'] ?? '',
-      categoryId: json['category_id'] ?? json['categoryId'] ?? '',
+      categoryId: parsedCategoryId,
       code: json['code'] ?? '',
       location: json['location'] ?? '',
       totalUnits: json['total_units'] ?? json['totalUnits'] ?? 0,

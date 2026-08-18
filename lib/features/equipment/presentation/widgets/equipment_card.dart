@@ -106,7 +106,6 @@ class EquipmentCard extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // Contenedor del Icono según Sección 3.3.1 (56x56 px, fondo #F7F8FA, radio 12px)
                   Container(
                     width: 54,
                     height: 54,
@@ -114,11 +113,24 @@ class EquipmentCard extends StatelessWidget {
                       color: AppTheme.background,
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: Icon(
-                      _getCategoryIcon(equipment.categoryId),
-                      size: 26,
-                      color: isAvailable ? AppTheme.primary : AppTheme.textSecondary,
-                    ),
+                    clipBehavior: Clip.antiAlias,
+                    child: equipment.imageUrl.isNotEmpty
+                        ? Image.network(
+                            equipment.imageUrl,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Icon(
+                                _getCategoryIcon(equipment.categoryId),
+                                size: 26,
+                                color: isAvailable ? AppTheme.primary : AppTheme.textSecondary,
+                              );
+                            },
+                          )
+                        : Icon(
+                            _getCategoryIcon(equipment.categoryId),
+                            size: 26,
+                            color: isAvailable ? AppTheme.primary : AppTheme.textSecondary,
+                          ),
                   ),
                   const SizedBox(width: 14),
                   // Título y Código
